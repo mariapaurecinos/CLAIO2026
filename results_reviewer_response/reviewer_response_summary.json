@@ -1,0 +1,101 @@
+{
+  "notebook": "reviewer_response_intelligent_experiment.ipynb",
+  "run_timestamp": "2026-06-24T17:46:51",
+  "git_hash": "b803c16b6666315ec69819a1e1b504905f74243a",
+  "python_version": "3.12.2",
+  "library_versions": {
+    "osmnx": "2.1.0",
+    "geopandas": "1.1.1",
+    "scikit-learn": "1.7.2",
+    "pulp": "3.3.2",
+    "numpy": "2.3.3",
+    "pandas": "2.3.2"
+  },
+  "params": {
+    "D_MAX": 366.0,
+    "S_MIN": 240.0,
+    "BETA": 0.25,
+    "P_TOTAL": 42,
+    "PENALTY": 5000.0,
+    "SEED": 42
+  },
+  "allocation": {
+    "original_mode": "fixed 7/cluster",
+    "improved_mode": "demand_weighted proportional",
+    "allocation_map": {
+      "0": 11,
+      "1": 11,
+      "2": 10,
+      "3": 5,
+      "4": 3,
+      "5": 2
+    }
+  },
+  "fair_comparison": [
+    {
+      "model": "Original proposed (spectral + MCA, fixed 7)",
+      "coverage_rate": 0.4557,
+      "w_coverage_rate": 0.4779,
+      "mean_dist_m": 221.55,
+      "w_mean_dist_m": 223.29,
+      "n_covered": 2156,
+      "n_openings": 42
+    },
+    {
+      "model": "Improved proposed (spectral + MCA, proportional)",
+      "coverage_rate": 0.4777,
+      "w_coverage_rate": 0.4938,
+      "mean_dist_m": 223.64,
+      "w_mean_dist_m": 227.78,
+      "n_covered": 2260,
+      "n_openings": 42
+    },
+    {
+      "model": "B1: Global P-Median (no clustering)",
+      "coverage_rate": 0.4783,
+      "w_coverage_rate": 0.4991,
+      "mean_dist_m": 225.06,
+      "w_mean_dist_m": 228.99,
+      "n_covered": 2263,
+      "n_openings": 42
+    },
+    {
+      "model": "B2: K-Means + P-Median",
+      "coverage_rate": 0.4731,
+      "w_coverage_rate": 0.4887,
+      "mean_dist_m": 223.26,
+      "w_mean_dist_m": 226.68,
+      "n_covered": 2238,
+      "n_openings": 42
+    },
+    {
+      "model": "B3: Euclidean solve, network evaluation",
+      "coverage_rate": 0.3902,
+      "w_coverage_rate": 0.391,
+      "mean_dist_m": 221.7,
+      "w_mean_dist_m": 221.78,
+      "n_covered": 1846,
+      "n_openings": 42
+    },
+    {
+      "model": "B4: No MCA (β=0)",
+      "coverage_rate": 0.4564,
+      "w_coverage_rate": 0.4776,
+      "mean_dist_m": 222.07,
+      "w_mean_dist_m": 224.37,
+      "n_covered": 2159,
+      "n_openings": 42
+    }
+  ],
+  "b3_correction": {
+    "original_coverage_euclidean_eval": 0.6588,
+    "corrected_coverage_network_eval": 0.3902,
+    "note": "B3 Euclidean-solve sites re-evaluated with pedestrian-network distances."
+  },
+  "improved_vs_original": {
+    "original_coverage": 0.4557,
+    "improved_coverage": 0.4777,
+    "original_w_mean_dist": 223.29,
+    "improved_w_mean_dist": 227.78
+  }
+}

@@ -1,0 +1,6 @@
+cluster_id,n_demand_nodes,total_population,total_weighted_demand,demand_share_pct,old_allocation_fixed7,new_allocation_prop,raw_proportional,total_check_fixed,total_check_prop
+0,639,77510,72602.7,31.86,7,13,13.379,35,42
+1,623,74436,69230.2,30.38,7,13,12.758,35,42
+2,356,36036,34125.2,14.97,7,6,6.289,35,42
+3,244,31405,29294.7,12.85,7,6,5.398,35,42
+4,212,24151,22661.9,9.94,7,4,4.176,35,42

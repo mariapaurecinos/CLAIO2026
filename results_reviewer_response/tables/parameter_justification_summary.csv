@@ -1,0 +1,7 @@
+Parameter,Chosen,Justification
+D_MAX (m),366.0,~5-min walk at 1.22 m/s; grid-search best coverage at D_MAX=450
+S_MIN (m),240.0,Maintains spacing between new openings; tested 3 values
+β (MCA weight),0.25,β=0.25 keeps demand co-related with population (CV moderate); sensitivity sweep confirms stability
+K (KNN affinity graph),12.0,Eigengap-selected k* stable across K=12; silhouette confirms
+P_total (new openings),42.0,Total budget = 42 (6 clusters × 7); held fixed across all models for comparability
+Threshold multiplier,1.0,1.0× avg_nn_m = 322.1 m; natural breakpoint mirroring existing store spacing

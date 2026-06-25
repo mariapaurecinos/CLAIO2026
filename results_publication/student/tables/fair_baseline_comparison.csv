@@ -1,0 +1,7 @@
+model,allocation_rule,solve_distance,eval_distance,clustering,mca_used,coverage_rate,w_coverage_rate,mean_dist_m,w_mean_dist_m,n_covered,n_demands,n_openings,runtime_s,eval_runtime_s,solver_status,coverage_pct,w_coverage_pct
+"Original proposed (spectral + MCA, fixed 7)",fixed 7/cluster,network,network,spectral,yes,0.4557,0.4779,221.55,223.29,2156,4731,42,,0.12,OK,45.57,47.79
+"Revised proposed (spectral + MCA, proportional)",proportional (demand-weighted),network,network,spectral,yes,0.4777,0.4938,223.64,227.78,2260,4731,42,25.82,0.05,OK,47.77,49.38
+B1: Global P-Median (no clustering),global p=42,network,network,none,yes,0.4783,0.4991,225.06,228.99,2263,4731,42,70.61,0.04,Optimal,47.83,49.91
+B2: K-Means + P-Median,fixed 7/cluster,network,network,k-means,yes,0.4731,0.4887,223.26,226.68,2238,4731,42,29.98,0.04,OK,47.31,48.87
+"B3: Euclidean solve, network evaluation",fixed 7/cluster,Euclidean (corrected eval=network),network,spectral,yes,0.3902,0.391,221.7,221.78,1846,4731,42,30.44,0.05,OK,39.02,39.1
+B4: No MCA (β=0),fixed 7/cluster,network,network,spectral,no (β=0),0.4564,0.4776,222.07,224.37,2159,4731,42,29.64,0.04,OK,45.64,47.76

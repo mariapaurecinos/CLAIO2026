@@ -1,0 +1,12 @@
+{
+  "D_MAX": 450.0,
+  "S_MIN": 180.0,
+  "beta": 0.25,
+  "p_total": 42,
+  "coverage_rate": 0.6823,
+  "w_coverage_rate": 0.715,
+  "w_mean_dist_m": 233.23,
+  "runtime_s": 6.84,
+  "score": 0.7266030958954239,
+  "n_pareto_points": 11
+}

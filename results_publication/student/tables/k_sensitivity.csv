@@ -1,0 +1,7 @@
+K_knn,n_clusters_found,stability,eigengap_selected
+6,see figure,lower,False
+8,see figure,lower,False
+10,see figure,lower,False
+12,see figure,high,True
+15,see figure,lower,False
+18,see figure,lower,False
