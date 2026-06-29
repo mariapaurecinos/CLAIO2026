@@ -1,0 +1,327 @@
+\section{Methodology}
+\label{sec:methodology}
+
+The framework proceeds through five sequential stages:
+candidate generation, spectral clustering, MCA-based demand weighting,
+proportional budget allocation, and clustered \mbox{p-median} optimization.
+Each stage is described below, together with the design rationale
+that distinguishes each algorithmic choice from simpler alternatives.
+
+% ---------------------------------------------------------------
+\subsection{Pedestrian Network and Candidate Generation}
+\label{ssec:network}
+
+All distance computations are performed on the pedestrian street network
+downloaded from OpenStreetMap~\cite{osm2025} and processed with
+OSMnx~\cite{boeing2017osmnx}.
+Census-block centroids and existing store locations are snapped to their
+nearest graph node before shortest-path computation.
+Let $G = (V, E)$ denote the projected walking graph and let $d_{u,v}$
+be the shortest-path distance between nodes $u, v \in V$.
+
+The first screening stage identifies blocks that are potentially underserved
+by the existing store network.
+For each census block~$i$, let $\delta_i$ denote its shortest-path distance
+to the nearest existing store.
+A block is classified as a \emph{candidate} if
+\begin{equation}
+  \delta_i > \tau \cdot \bar{d}_{\text{nn}},
+  \label{eq:threshold}
+\end{equation}
+where $\bar{d}_{\text{nn}}$ is the empirical average nearest-neighbor distance
+among all existing stores and $\tau$ is a multiplier calibrated from data.
+Setting $\tau = 1.0$—so that the threshold matches the observed inter-store
+spacing—produces a candidate set whose size is directly tied to the
+existing coverage density rather than to an arbitrary absolute cutoff.
+Sensitivity of coverage rate to $\tau \in \{0.5, 0.75, 1.0, 1.25, 1.5\}$
+is reported in \cref{sec:sensitivity}.
+
+% ---------------------------------------------------------------
+\subsection{Graph-Based Spectral Clustering}
+\label{ssec:spectral}
+
+Computing all-pairs pedestrian distances is impractical for large instances.
+Instead, a sparse affinity matrix is constructed in two steps.
+For each census block, the $K = 12$ nearest neighbors in Euclidean space are
+identified; for those candidate pairs only, the actual road-network distance
+is computed.
+The affinity between blocks $i$ and $j$ is defined by a Gaussian kernel:
+\begin{equation}
+  w_{i,j} = \exp\!\left(-\frac{d_{i,j}^{2}}{2\sigma^{2}}\right),
+  \label{eq:affinity}
+\end{equation}
+where $\sigma$ is the median observed road-network distance among all evaluated
+neighbor pairs.
+The resulting sparse matrix $W$ defines a weighted similarity graph
+whose edges reflect actual network connectivity rather than geometric proximity.
+
+The normalized graph Laplacian is:
+\begin{equation}
+  L = D^{-1/2}(D - W)D^{-1/2},
+  \label{eq:laplacian}
+\end{equation}
+where $D$ is the diagonal degree matrix of $W$.
+The initial cluster count $k^*$ is selected by the eigengap heuristic:
+\begin{equation}
+  k^* = \arg\max_k \left(\lambda_{k+1} - \lambda_k\right),
+  \label{eq:eigengap}
+\end{equation}
+using the smallest eigenvalues of $L$~\cite{vonluxburg2007tutorial}.
+\Cref{fig:eigengap} shows the eigenvalue spectrum and eigengap profile
+for the student-area instance ($k^* = 16$); the result is confirmed by a
+secondary silhouette analysis (\cref{fig:silhouette}).
+
+The raw partition typically contains several very small territories.
+To produce operationally deployable regions, clusters with fewer than
+200 census blocks are merged into the nearest major cluster using
+road-network distance whenever available and Euclidean distance as a fallback.
+\Cref{fig:clusters} compares the raw $k^*$-cluster partition against
+the final merged solution for the student-area instance.
+
+The $K = 12$ neighbor count was validated by comparing eigengap stability
+across $K \in \{6, 8, 10, 12, 15, 18\}$: lower values produce less stable
+eigengaps and more fragmented clusters, while the signal is consistent
+for $K \geq 12$ (\cref{fig:k_sensitivity}).
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{spectral_eigengap_decision}
+    \caption{Eigenvalue spectrum and eigengap ($k^*=16$, student area).}
+    \label{fig:eigengap}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{spectral_silhouette_support}
+    \caption{Silhouette coefficient for $k$ values around $k^*$.}
+    \label{fig:silhouette}
+  \end{subfigure}
+  \caption{Spectral cluster-count selection for the student-area instance.
+           The eigengap selects $k^*=16$; silhouette analysis provides
+           secondary confirmation.}
+  \label{fig:cluster_selection}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{graph_spectral_clusters_before_after_merge}
+  \caption{Raw 16-cluster partition (left) and the six-cluster solution
+           after the small-cluster merge rule (right) for the student area.
+           Road-network affinity preserves urban connectivity; the merge rule
+           converts fragmented micro-territories into deployment-ready zones.}
+  \label{fig:clusters}
+\end{figure}
+
+% ---------------------------------------------------------------
+\subsection{Socio-Urban Demand Weighting via MCA}
+\label{ssec:mca}
+
+Population count alone is an insufficient demand proxy for retail location
+because blocks of equal population can differ sharply in infrastructure quality,
+transport access, and economic activity.
+MCA is used instead of PCA because the source variables are categorical
+or categorized~\cite{greenacre2017correspondence,greenacre2006multiple}.
+Each continuous block-level variable is discretized into quintiles when
+it has sufficient cardinality; otherwise, original categories are retained.
+Missing values are explicitly encoded as an additional category so that
+no observation is discarded.
+The final indicator matrix contains 102 dummy columns derived from
+33 source variables covering age structure, disability, schooling,
+housing conditions, household services, and urban infrastructure
+(street signage, bicycle lanes, pedestrian crossings, ramps,
+public lighting, collective transport, and trees).
+
+The resulting MCA coordinates are denoted $\text{MCA}_1, \text{MCA}_2, \ldots$
+After Greenacre's correction~\cite{greenacre1991interpreting},
+$\text{MCA}_1$ explains approximately 72\% of adjusted inertia
+in the student-area instance (\cref{fig:mca_inertia}).
+Infrastructure and urban-environment indicators---street signage, bicycle
+infrastructure, pedestrian crossings, ramps, transport access, education,
+and housing services---load most strongly on this dimension.
+Categories reflecting higher schooling and more complete urban infrastructure
+appear on the positive end of $\text{MCA}_1$, making it interpretable as a
+socio-urban quality gradient rather than a purely demographic axis.
+
+To prevent arbitrary sign from entering the optimization weights,
+$\text{MCA}_1$ is oriented so that higher schooling corresponds to
+positive values; if the raw extraction is inverted, all scores are
+multiplied by $-1$.
+The normalized demand modifier is then:
+\begin{equation}
+  \tilde{m}_i =
+    \frac{\text{MCA}_{1,i} - \min(\text{MCA}_1)}
+         {\max(\text{MCA}_1) - \min(\text{MCA}_1)},
+  \label{eq:mca_norm}
+\end{equation}
+which rescales the gradient to $[0, 1]$ without altering relative differences.
+\Cref{fig:mca_maps} confirms that $\text{MCA}_1$ scores exhibit strong
+spatial continuity, which validates their use as a geographically structured
+demand modifier.
+\Cref{fig:mca_by_cluster} shows that spectral clusters differ not only
+in geometry but also in their MCA profiles, reinforcing the rationale
+for solving the optimization model within each territory independently.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{mca_explained_components}
+    \caption{Raw and Greenacre-corrected explained inertia by component.}
+    \label{fig:mca_inertia}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{mca_dims_by_cluster_boxplot}
+    \caption{MCA\textsubscript{1,2,3} by spatial cluster.}
+    \label{fig:mca_by_cluster}
+  \end{subfigure}
+  \caption{MCA component structure and its relationship to the spectral
+           territory partition. The first corrected dimension concentrates
+           most of the socio-urban variation; clusters differ in MCA profile
+           as well as in spatial extent.}
+  \label{fig:mca_structure}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{mca123_spatial_maps}
+  \caption{Choropleth maps of $\text{MCA}_1$ (left), $\text{MCA}_2$ (center),
+           and $\text{MCA}_3$ (right) for the student-area instance.
+           The strong spatial continuity of $\text{MCA}_1$ validates its
+           role as a geographically structured demand weight.}
+  \label{fig:mca_maps}
+\end{figure}
+
+% ---------------------------------------------------------------
+\subsection{Demand-Proportional Budget Allocation}
+\label{ssec:allocation}
+
+The original formulation allocated a fixed number of new openings ($p_{\text{new}}$)
+to each cluster regardless of its size or demand.
+In a six-cluster partition where cluster sizes range from 212 to 1,448 blocks
+(\cref{tab:allocation}), a fixed allocation of seven openings per cluster
+implies radically different per-demand coverage ratios across territories.
+The largest cluster receives one opening per 184 blocks; the smallest,
+one per 30.
+
+To correct this, a proportional allocation rule is introduced:
+\begin{equation}
+  p_c = \max\!\left(1,\; \left\lfloor
+    P_{\text{total}} \cdot \frac{\sum_{i \in C_c} w_i}
+                                {\sum_{i \in I} w_i}
+  \right\rceil\right),
+  \label{eq:proportional}
+\end{equation}
+where $C_c$ is the set of demand blocks in cluster~$c$, $w_i$ is the
+demand weight defined in \cref{eq:demand_weight} below,
+and the allocation is rounded to the nearest integer with a minimum of one.
+Integer remainder is distributed to the largest cluster.
+\Cref{fig:allocation} shows the shift from fixed to proportional allocation
+for all three study areas; the largest clusters receive substantially more
+openings, which translates into measurable coverage gains in
+blocks-per-opening terms.
+
+\begin{table}[t]
+  \centering
+  \caption{Demand-proportional budget allocation versus the original
+           fixed-per-cluster rule (student-area instance).}
+  \label{tab:allocation}
+  \input{tables/table_allocation}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\textwidth]{fixed_vs_proportional_allocation}
+  \caption{Fixed (original) versus proportional (revised) opening allocation
+           by cluster for the student-area instance. The proportional rule
+           concentrates the budget where demand is heaviest.}
+  \label{fig:allocation}
+\end{figure}
+
+% ---------------------------------------------------------------
+\subsection{Clustered P-Median Formulation}
+\label{ssec:pmedian}
+
+For each cluster $c$ the model is solved independently.
+Let $I_c$ and $J_c$ denote the demand blocks and candidate sites
+within cluster~$c$, let $E_c$ be the existing stores whose service
+radii overlap with~$I_c$, and let $P_c = E_c \cup J_c$.
+For each demand block~$i$, let $P_i = \{p \in P_c : d_{i,p} \leq D_{\max}\}$
+be the set of feasible service points.
+Let $\mathcal{C}_c \subset J_c \times J_c$ be the set of candidate pairs
+separated by less than $S_{\min}$ (the minimum separation constraint
+that prevents demand cannibalization).
+
+The demand weight for block~$i$ is:
+\begin{equation}
+  w_i = p_i (1 + \beta \tilde{m}_i),
+  \label{eq:demand_weight}
+\end{equation}
+where $p_i$ is the population of block~$i$ and $\beta \geq 0$ controls
+the influence of the MCA modifier.
+Setting $\beta = 0$ reduces the model to pure population weighting;
+sensitivity to $\beta \in \{0.0, 0.1, 0.25, 0.5, 1.0\}$ is analyzed in
+\cref{sec:sensitivity}.
+
+Binary decision variables are:
+$x_{i,p} = 1$ if block~$i$ is assigned to service point~$p$;
+$y_j = 1$ if candidate~$j$ is opened; and
+$u_i = 1$ if block~$i$ remains uncovered.
+The objective minimizes total weighted assignment distance plus a penalty
+for uncovered demand:
+\begin{equation}
+  \min \sum_{i \in I_c} \sum_{p \in P_i} w_i d_{i,p} x_{i,p}
+       + \lambda \sum_{i \in I_c} w_i u_i.
+  \label{eq:objective}
+\end{equation}
+Subject to:
+\begin{align}
+  \sum_{p \in P_i} x_{i,p} + u_i &= 1, && \forall i \in I_c,
+  \label{eq:assignment} \\
+  \sum_{j \in J_c} y_j &= p_c,
+  \label{eq:budget} \\
+  y_j + y_k &\leq 1, && \forall (j, k) \in \mathcal{C}_c,
+  \label{eq:separation} \\
+  x_{i,j} &\leq y_j, && \forall i \in I_c,\; j \in J_c \cap P_i,
+  \label{eq:implication}
+\end{align}
+with $x_{i,p}, y_j, u_i \in \{0, 1\}$.
+All subproblems are solved to optimality in the reported experiments
+(\cref{sec:results}).
+
+% ---------------------------------------------------------------
+\subsection{Parameter Calibration}
+\label{ssec:calibration}
+
+A key weakness of the original submission was that parameters
+$D_{\max}$, $S_{\min}$, $\beta$, and $\tau$ were fixed without empirical
+justification.
+This paper calibrates them jointly through a Pareto-frontier grid search
+over 81 combinations of $D_{\max} \in \{300, 366, 450\}$~m,
+$S_{\min} \in \{200, 240, 300\}$~m, and $p_c \in \{5, 7, 9\}$
+per cluster (for three budget levels), repeated for
+$\beta \in \{0.1, 0.25, 0.5\}$.
+
+The Pareto criterion jointly optimizes coverage rate and weighted mean
+assignment distance; parameter combinations on the frontier
+are identified as calibration candidates.
+The chosen parameters are selected from the frontier as those maximizing
+coverage without simultaneously increasing weighted distance
+beyond the frontier's convex hull (\cref{fig:pareto}).
+\Cref{tab:parameters} reports the calibrated values for each study area.
+
+\begin{table}[t]
+  \centering
+  \caption{Calibrated model parameters by study area.
+           All values were selected from the Pareto grid rather than
+           fixed \textit{a priori}.}
+  \label{tab:parameters}
+  \input{tables/table_parameters}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.65\textwidth]{pareto_frontier_dmax_smin}
+  \caption{Pareto frontier of coverage rate versus weighted mean assignment
+           distance for the student-area grid search over $D_{\max}$
+           and $S_{\min}$.
+           The selected configuration (marked) lies on the efficient frontier.}
+  \label{fig:pareto}
+\end{figure}

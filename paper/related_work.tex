@@ -1,0 +1,68 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Network facility location.}
+The \mbox{p-median} problem seeks to select $p$ service sites that minimize
+total demand-weighted assignment distance~\cite{hakimi1964optimum}.
+Its network variant, in which distances are shortest paths on a graph rather
+than Euclidean measures, is the natural model when travel effort matters.
+Maranzana's early observation that Euclidean distances understate network
+costs in irregular urban street layouts~\cite{maranzana1964siting} has been
+confirmed repeatedly in empirical studies; Boeing's OSMnx library has made
+pedestrian-network extraction operationally straightforward~\cite{boeing2017osmnx}.
+Solution methods for medium-to-large instances range from Lagrangian relaxation
+and column generation to commercial MILP
+solvers~\cite{avella2007lagrangian,lorena2003constructive}.
+For instances with thousands of candidate sites and demand nodes,
+decomposition approaches that reduce the effective problem size have
+practical value, as long as the decomposition does not introduce large
+coverage gaps relative to the global optimum.
+
+\paragraph{Clustering-based territorial decomposition.}
+Partitioning a study area before solving a subproblem independently in each
+territory is a well-known heuristic for scaling facility location to larger
+instances.
+The quality of the decomposition depends on whether the partition respects
+the connectivity of the underlying network.
+Centroid-based methods such as \mbox{k-means} impose Euclidean distances on
+both the partition and the assignment, which introduces inconsistency when
+actual travel distances are non-Euclidean.
+Spectral clustering~\cite{shi2000normalized,ng2002spectral,vonluxburg2007tutorial}
+avoids this by using the normalized graph Laplacian of an affinity matrix
+defined on road-network distances; the resulting partition follows the
+connectivity structure of the street network rather than Euclidean geometry.
+The eigengap heuristic provides a data-driven criterion for selecting the
+number of clusters, and a silhouette-score secondary check supplies additional
+validation~\cite{theodoridis2009clustering}.
+A post-processing merge rule that absorbs small territories into their nearest
+major cluster bridges the gap between the mathematically selected partition
+and the operationally deployable territory count.
+
+\paragraph{Socioeconomic demand weighting.}
+Demand models in urban facility location typically scale by population count,
+which disregards heterogeneity in purchasing power, infrastructure quality,
+and transport access.
+MCA provides a principled method for compressing multiple categorical census
+variables into orthogonal latent dimensions~\cite{greenacre1988correspondence,%
+greenacre2006multiple,greenacre2017correspondence}.
+Because census data are inherently categorical or categorized, MCA is preferable
+to PCA: it operates on the indicator matrix of dummy-coded categories rather
+than on a covariance matrix of continuous variables.
+Greenacre's corrected-inertia formula removes the inflation that raw MCA
+eigenvalues exhibit when the number of indicator columns is large, making
+dimension importance comparable across models~\cite{greenacre1991interpreting}.
+The normalized first MCA dimension serves as a socio-urban quality gradient
+that upweights blocks with better infrastructure, education, and housing
+services, directing new openings toward areas where economic activity
+is most likely to be sustained.
+
+\paragraph{Gap in existing work.}
+Prior applications of \mbox{p-median} models to convenience-store or retail
+location typically fix parameters by convention, use Euclidean distances as
+a proxy, compare against no baseline, and validate in a single geographic
+context.
+This paper addresses all four gaps: parameters are calibrated from data,
+distances are pedestrian-network distances in both solving and evaluation,
+four controlled baselines are compared on equal terms, and the framework
+is validated in three urban settings with qualitatively different
+supply-demand structures.

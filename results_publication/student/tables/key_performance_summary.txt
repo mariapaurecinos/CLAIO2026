@@ -1,16 +1,16 @@
 KEY PERFORMANCE SUMMARY — Tecnológico de Monterrey student area
-Generated: 2026-06-24 20:02:53
+Generated: 2026-06-26 12:11:29
 
-The revised clustered model retains 99.9% of the global p-median coverage while reducing runtime by 63.4%, with a weighted mean distance difference of -1.2 metres.
+The proposed clustered model retains 99.9% of the global p-median coverage while reducing runtime by 63.9%, with a weighted mean distance difference of -1.2 metres.
 
-Revised proposed coverage    : 47.77%
+Proposed model coverage      : 47.77%
 Global P-Median coverage     : 47.83%
 Coverage retention           : 99.9%
 
-Revised runtime              : 25.8 s
-Global runtime               : 70.6 s
-Runtime reduction            : 63.4%
+Proposed model runtime       : 27.5 s
+Global runtime               : 76.3 s
+Runtime reduction            : 63.9%
 
-Weighted mean distance (revised) : 227.8 m
+Weighted mean distance (proposed): 227.8 m
 Weighted mean distance (global)  : 229.0 m
 Distance difference              : -1.2 m

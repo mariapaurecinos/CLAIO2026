@@ -1,0 +1,15 @@
+\begin{tabular}{l rrr rrr}
+\toprule
+& \multicolumn{3}{c}{\textbf{Candidate set (\% of blocks) at } $\tau$}
+& \multicolumn{3}{c}{\textbf{Corr$(w_i,\,p_i)$ at } $\beta$} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+\textbf{Study area}
+  & $\tau=0.5$ & $\tau=1.0^{\star}$ & $\tau=1.5$
+  & $\beta=0$  & $\beta=0.25^{\star}$ & $\beta=1.0$ \\
+\midrule
+Student    & 94.1 & 81.9 & 69.2 & 1.000 & 0.970 & 0.966 \\
+City       & 93.5 & 82.3 & 70.9 & 1.000 & 0.987 & 0.705 \\
+Industrial & 94.2 & 90.5 & 86.7 & 1.000 & 0.980 & 0.614 \\
+\bottomrule
+\multicolumn{7}{l}{\footnotesize $\star$ Selected value. $K=12$ (KNN affinity count, not cluster count) yields the most stable eigengap profile in all three instances.}
+\end{tabular}

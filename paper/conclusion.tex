@@ -1,0 +1,42 @@
+\section{Conclusions}
+\label{sec:conclusion}
+
+This paper presented a calibrated, modular geospatial optimization framework
+for retail branch expansion that integrates pedestrian-network accessibility,
+graph-based spectral clustering, MCA-based socioeconomic demand weighting,
+and a clustered \mbox{p-median} formulation.
+Relative to the original submission, the framework incorporates three
+substantive advances: parameter calibration from a Pareto-frontier grid search,
+a demand-proportional cluster-budget allocation rule, and a rigorous baseline
+comparison conducted entirely under pedestrian-network distance.
+
+The empirical results across three urban contexts in Mexico establish two
+principal findings.
+First, territorial decomposition via spectral clustering retains
+93--100\% of the global \mbox{p-median} coverage while reducing
+solver runtime by up to 67\% in medium-to-large instances;
+the decomposition gap is largest in supply-constrained peri-urban
+settings where most blocks qualify as candidates.
+Second, Euclidean-distance models systematically underestimate coverage
+and overestimate accessibility by 10--20\%, confirming that network-based
+distances are not a refinement but a requirement for urban facility location.
+
+The methodological contribution is the demonstration that MCA and spectral
+clustering can be integrated into a single, calibrated facility-location
+pipeline whose parameters are selected from data rather than convention,
+and whose performance can be benchmarked against a provably optimal global
+reference.
+The pipeline is modular: each component can be replaced without
+redesigning the whole system, and the parameter calibration procedure
+transfers directly to new study areas.
+
+Future work can extend the framework in several directions.
+Incorporating site acquisition and operating costs would make it directly
+actionable for investment decisions.
+Competition-sensitive demand models---where each new opening also affects
+the patronage of nearby existing stores---would extend the commercial
+validity of the objective.
+Scenario analysis on service-radius assumptions, robustness under uncertain
+travel times, and validation against observed transaction data would further
+strengthen the framework as a decision-support tool for retail and
+public-service network design.

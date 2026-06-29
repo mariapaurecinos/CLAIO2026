@@ -1,0 +1,32 @@
+Facility location decisions in dense urban environments depend not only on
+population size but also on network accessibility, territorial structure,
+and socioeconomic heterogeneity. This paper presents a modular geospatial
+optimization framework that integrates pedestrian-network distances derived
+from OpenStreetMap, graph-based spectral clustering, multiple correspondence
+analysis~(MCA), and a clustered \mbox{p-median} formulation with coverage,
+separation, and demand-penalty constraints.
+The methodological contribution is a complete, calibrated pipeline in which
+every parameter is justified through multi-objective sensitivity
+analysis over an 81-point grid rather than fixed \textit{a priori}.
+A proportional-demand allocation rule replaces the original fixed-per-cluster
+budget, reducing inequity across territories of different size.
+
+The framework is validated across three urban contexts in Mexico that differ
+substantially in density, infrastructure supply, and commercial maturity:
+a dense student-area district (Tecnológico de Monterrey, Monterrey),
+a less-developed city~(Villahermosa, Tabasco), and an industrial
+corridor~(Estado de México).
+In all three settings the clustered model is compared on equal terms against
+four baselines evaluated under pedestrian-network distance:
+a global \mbox{p-median} optimum, a \mbox{k-means} partitioning baseline,
+an Euclidean-solve baseline, and a no-MCA variant.
+The proposed model retains \SIrange{93.2}{99.9}{\percent} of the global
+optimum coverage while reducing solver runtime by up to \SI{67}{\percent}
+in larger instances.
+Euclidean-distance models underestimate mean assignment distance by
+\SIrange{10}{20}{\percent} relative to network evaluation, confirming
+that pedestrian routing is an essential component of any urban
+accessibility assessment.
+The framework is modular and transferable to clinics, pharmacies,
+service offices, and other location systems where
+network accessibility and territorial heterogeneity are primary concerns.

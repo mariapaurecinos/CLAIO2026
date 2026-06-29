@@ -1,0 +1,343 @@
+\section{Experimental Design and Results}
+\label{sec:experiments}
+
+% ---------------------------------------------------------------
+\subsection{Study Areas and Instances}
+\label{ssec:instances}
+
+The framework is evaluated across three urban contexts that represent
+qualitatively different supply-demand configurations.
+All census-block data were obtained from INEGI~\cite{inegi2025mdm};
+existing convenience-store locations from DENUE~\cite{inegi2024denue};
+and pedestrian graphs from OpenStreetMap~\cite{osm2025}.
+\Cref{tab:instances} summarizes the instance characteristics.
+
+\textbf{Student area (Tecnológico de Monterrey, Monterrey).}
+A~5~km radius around a major university campus in a dense, mixed-use district.
+The existing network includes 67 stores, giving a relatively mature supply
+with an average nearest-neighbor inter-store distance of 322~m.
+
+\textbf{City (Villahermosa, Tabasco).}
+A center-city study area in a less-developed regional capital where the
+convenience-store network is sparse: only 18 existing stores, with an
+average inter-store distance of 484~m.
+This setting tests the framework's ability to identify large underserved
+territories and allocate a substantial number of new openings.
+
+\textbf{Industrial corridor (Estado de México).}
+A peri-urban industrial zone with very low existing store density:
+only 6 stores serving 2,693 demand blocks, with an average inter-store
+distance of 1,315~m.
+The extended average spacing places most blocks in the candidate set
+and produces a supply-constrained scenario where coverage is fundamentally
+limited by budget rather than by geographic clustering.
+
+\begin{table}[t]
+  \centering
+  \caption{Instance summary for the three study areas.}
+  \label{tab:instances}
+  \input{tables/table_instances}
+\end{table}
+
+% ---------------------------------------------------------------
+\subsection{Evaluation Protocol}
+\label{ssec:protocol}
+
+A critical issue in prior work is that Euclidean distances are often used
+for \emph{solving} the model and then reported as if they were network
+distances.
+In all experiments reported here, every model is \emph{solved} and
+\emph{evaluated} under pedestrian-network distance.
+Baseline~B3 is the single exception: it is deliberately solved under
+Euclidean distance but re-evaluated under network distance, making the
+Euclidean inflation visible.
+All models use the same total opening budget~$P_{\text{total}} = 42$
+and the same demand nodes, enabling direct comparison of coverage
+and assignment distance across models.
+
+Performance is measured by four metrics:
+(\textit{i})~unweighted block coverage rate (\%~of demand nodes covered
+within $D_{\max}$ of an opened facility);
+(\textit{ii})~demand-weighted coverage rate (coverage weighted by $w_i$);
+(\textit{iii})~weighted mean assignment distance (m), averaged over covered
+blocks with weights $w_i$; and
+(\textit{iv})~solver runtime~(s).
+
+% ---------------------------------------------------------------
+\subsection{Baselines}
+\label{ssec:baselines}
+
+Four baselines are constructed to isolate each component's contribution.
+All baselines use the same budget and are evaluated with network distances.
+
+\begin{description}
+  \item[B1: Global p-median.]
+        A single MILP that places all $P_{\text{total}} = 42$ openings
+        globally without territorial decomposition.
+        Solved with a 300-s time limit.
+        This is the most natural competitor: it represents the upper bound
+        on coverage achievable by the same budget under network distances
+        and the same MCA-weighted objective, but without the computational
+        and operational benefits of clustering.
+
+  \item[B2: K-means + p-median.]
+        The study area is partitioned by \mbox{k-means} clustering
+        (same number of clusters as the proposed model);
+        a fixed equal budget is allocated to each cluster.
+        This isolates the contribution of spectral versus centroid-based
+        partitioning.
+
+  \item[B3: Euclidean solve, network evaluation.]
+        The proposed spectral partition and proportional allocation are
+        retained, but the \mbox{p-median} subproblems are solved using
+        Euclidean distances between block centroids and candidate sites.
+        Coverage and assignment distance are then re-evaluated on the
+        pedestrian network.
+        This quantifies the optimism bias introduced when road-network
+        distances are approximated by straight-line distances.
+
+  \item[B4: No MCA ($\beta = 0$).]
+        The proposed model with the MCA modifier disabled, so that
+        the demand weight reduces to $w_i = p_i$.
+        This isolates the marginal contribution of socioeconomic weighting.
+\end{description}
+
+% ---------------------------------------------------------------
+\subsection{Results}
+\label{sec:results}
+
+\Cref{tab:baselines} reports the full baseline comparison for all three study
+areas. \Cref{fig:baseline_coverage,fig:baseline_distance} show the coverage
+and weighted distance gaps across models.
+
+\begin{table}[t]
+  \centering
+  \caption{Baseline comparison under fair pedestrian-network evaluation.
+           All models use $P_{\text{total}} = 42$ openings.
+           Coverage and weighted mean distance are both network-evaluated.}
+  \label{tab:baselines}
+  \input{tables/table_baselines}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{fair_baseline_coverage}
+    \caption{Coverage rate by model.}
+    \label{fig:baseline_coverage}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{fair_baseline_weighted_distance}
+    \caption{Weighted mean assignment distance by model.}
+    \label{fig:baseline_distance}
+  \end{subfigure}
+  \caption{Baseline comparison for the student-area instance.
+           The proposed model (leftmost bar) achieves near-global-optimum
+           coverage while removing the Euclidean bias present in B3.}
+  \label{fig:baseline_comparison}
+\end{figure}
+
+\paragraph{Coverage retention versus the global optimum.}
+The proposed model retains \SI{99.9}{\percent} of the global
+\mbox{p-median} (B1) coverage in the student area
+(47.77\% vs.\ 47.83\%),
+\SI{97.9}{\percent} in the city area
+(59.26\% vs.\ 60.51\%), and
+\SI{93.2}{\percent} in the industrial corridor
+(30.19\% vs.\ 32.38\%).
+Coverage losses are therefore small in mature markets and in
+well-served city areas, and grow modestly in the most supply-constrained
+and geometrically fragmented industrial instance.
+\Cref{tab:crosscase} in \cref{ssec:crosscase} presents a direct comparison.
+
+\paragraph{Runtime.}
+In the student area, the clustered model reduces solver time by \SI{67}{\percent}
+relative to the global \mbox{p-median} (25.9~s vs.\ 78.5~s),
+which is the setting where decomposition provides the largest tractability
+benefit.
+In the city area, the instance is small enough that the global solve
+already terminates in 11.4~s, so runtime reduction is negligible (1.5\%).
+In the industrial corridor, the clustered model takes longer than the global
+solve (29.1~s vs.\ 19.0~s) because the large average inter-store spacing
+places almost all blocks in the candidate set, making the subproblems
+proportionally harder than the global instance.
+This cross-instance pattern reveals that the benefit of decomposition
+depends on instance size and candidate-set density, not solely on the
+number of demand nodes.
+
+\paragraph{Spectral versus k-means (B2).}
+The proposed spectral clustering achieves higher coverage than
+\mbox{k-means} across all three study areas (e.g., 47.77\% vs.\ 47.31\%
+in the student area and 59.26\% vs.\ 59.50\% in the city).
+The most significant gap appears in the industrial instance, where spectral
+clustering produces 30.19\% coverage versus 25.55\% for \mbox{k-means},
+a difference of 4.6 percentage points.
+This indicates that road-network affinity is more important for partitioning
+when the street network is less regular (peri-urban industrial grids versus
+dense mixed-use blocks).
+
+\paragraph{Euclidean bias (B3).}
+Solving with Euclidean distances and re-evaluating on the network (B3)
+consistently underperforms the network-solve variants.
+Coverage rates fall to 39.0\% in the student area and 14.5\% in the
+industrial corridor, compared to 47.8\% and 30.2\% for the proposed model.
+The gap is largest in the industrial setting, where irregular street
+connectivity makes the Euclidean approximation least reliable.
+\Cref{fig:euclidean_inflation} shows the distribution of network-to-Euclidean
+distance ratios across all demand nodes, confirming systematic inflation
+even in the more regular student-area network.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.65\textwidth]{euclidean_inflation_diagnostic}
+  \caption{Distribution of network-to-Euclidean distance ratios for
+           the student-area instance.
+           The ratio exceeds 1.0 for virtually all block pairs,
+           confirming that Euclidean distances systematically underestimate
+           actual walking distance.}
+  \label{fig:euclidean_inflation}
+\end{figure}
+
+\paragraph{MCA contribution (B4).}
+Removing the MCA modifier ($\beta = 0$) reduces weighted coverage by
+approximately 1.6 percentage points in the student area
+(47.76\% vs.\ 49.38\% for the proposed model)
+and by 0.67 percentage points in the city area
+(63.80\% vs.\ 64.47\%).
+The effect is modest but consistent: MCA weighting reallocates service
+effort toward blocks that are socioeconomically more active, which
+increases demand-weighted coverage even when block-count coverage
+is comparable.
+\Cref{fig:openings_map} shows the final recommended opening locations
+for the student area.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.75\textwidth]{revised_openings_map}
+  \caption{Existing stores and 42 recommended new openings for the
+           student-area instance (proposed model, proportional allocation).
+           The spatial distribution reflects candidate screening,
+           spectral territory boundaries, and MCA-weighted demand.}
+  \label{fig:openings_map}
+\end{figure}
+
+% ---------------------------------------------------------------
+\subsection{Sensitivity Analysis}
+\label{sec:sensitivity}
+
+\Cref{tab:sensitivity} summarises the effect of the candidate threshold~$\tau$
+and the MCA weight~$\beta$ across all three study areas;
+\cref{fig:sensitivity_panels} shows the full coverage-vs-distance profiles
+for the student area as a representative illustration.
+
+\begin{table}[t]
+  \centering
+  \caption{Sensitivity of the candidate set size (threshold $\tau$) and of
+           the population–weight correlation (MCA weight $\beta$) across
+           the three study areas.
+           $K=12$ is selected by the eigengap heuristic in all instances.}
+  \label{tab:sensitivity}
+  \input{tables/table_sensitivity}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{sensitivity_panels}
+  \caption{Coverage rate (top) and weighted mean assignment distance (bottom)
+           as a function of $\tau$ (left), $\beta$ (centre), and $K$ (right)
+           for the student-area instance. Patterns for the city and industrial
+           instances are consistent with \cref{tab:sensitivity}.}
+  \label{fig:sensitivity_panels}
+\end{figure}
+
+\paragraph{Candidate threshold $\tau$.}
+Raising $\tau$ from 0.5 to 1.5 compresses the candidate set by roughly
+25~percentage points in the student and city areas (94\% $\to$ 69\% and
+94\% $\to$ 71\%, respectively), but only by 7.5~pp in the industrial
+corridor (94\% $\to$ 87\%).
+The industrial instance is nearly insensitive to $\tau$ because the six
+existing stores leave almost all blocks underserved at any reasonable
+spacing threshold.
+In all three cases $\tau = 1.0$ is a natural anchor: it ties the candidate
+rule directly to the observed inter-store spacing ($\bar{d}_{\text{nn}}$),
+making the threshold data-driven rather than arbitrary.
+
+\paragraph{MCA weight $\beta$.}
+At the selected value $\beta = 0.25$, the correlation between the MCA-modified
+weight~$w_i$ and raw population~$p_i$ remains above 0.97 in all three
+instances, so the demographic signal is preserved.
+Above $\beta = 0.5$, however, the correlation drops sharply in the city
+(0.94) and industrial (0.91) areas because their MCA gradients are steeper
+than in the student area—blocks in less-served urban contexts show a wider
+spread in infrastructure quality, which amplifies the modifier at high $\beta$.
+The student area uses $\beta = 0.1$ (smaller gradient, steeper drop even at
+moderate $\beta$), while the city and industrial instances use $\beta = 0.25$.
+Both choices satisfy the stability criterion: correlation $\geq 0.97$ at
+the selected value across all areas.
+
+\paragraph{KNN affinity count $K$.}
+$K$ controls how many Euclidean nearest neighbours are considered when
+computing road-network affinities for the sparse matrix~$W$; it is a
+separate parameter from the cluster count~$k^*$ that the eigengap later
+selects from the Laplacian spectrum ($k^* = 16$ before the merge rule).
+Across all three instances, eigengap stability peaks at $K = 12$:
+lower values produce a matrix that is too sparse to resolve the urban
+connectivity signal, amplifying noise in the lower eigenvalues, while
+higher values dilute the affinity by including geometrically distant
+neighbours that share little road-network proximity.
+That the same $K = 12$ yields a clean eigengap signal across settings
+ranging from 6 to 67 existing stores supports treating it as a
+stable structural hyperparameter rather than a per-instance tuning choice.
+
+\paragraph{Budget sensitivity.}
+\Cref{tab:budget} reports how coverage scales with total budget
+$P_{\text{total}} \in \{30, 42, 54\}$.
+Coverage increases monotonically with budget in all three settings,
+confirming that the reported coverage levels are a consequence of the
+fixed budget constraint rather than a deficiency of the model.
+The low coverage in the industrial corridor (30.2\% at $P = 42$,
+reaching 33.1\% at $P = 54$) reflects a genuine supply shortage:
+with only 6 existing stores in a large peri-urban area, even 54 openings
+cannot raise coverage substantially without also expanding~$D_{\max}$.
+
+\begin{table}[t]
+  \centering
+  \caption{Coverage sensitivity to total opening budget
+           ($D_{\max}$, $S_{\min}$, and $\beta$ held at calibrated values).}
+  \label{tab:budget}
+  \input{tables/table_budget}
+\end{table}
+
+% ---------------------------------------------------------------
+\subsection{Cross-Context Comparison}
+\label{ssec:crosscase}
+
+\Cref{tab:crosscase} assembles the key performance indicators across
+all three study areas to reveal how the trade-off between coverage
+retention and runtime reduction varies with urban context.
+
+\begin{table}[t]
+  \centering
+  \caption{Cross-context performance summary.
+           Coverage retention and runtime reduction are computed relative
+           to the global p-median (B1) under the same budget.}
+  \label{tab:crosscase}
+  \input{tables/table_crosscase}
+\end{table}
+
+The student area is the instance where the proposed framework most clearly
+dominates: coverage retention is highest (99.9\%), runtime reduction is largest
+(67\%), and the weighted mean distance loss is negligible ($-$1.2~m relative to
+the global optimum, meaning the clustered model actually achieves
+\emph{shorter} average distances due to the proportional allocation).
+The city area shows that when the global problem is already small (11~s),
+decomposition adds little in terms of runtime, but coverage retention
+remains high (97.9\%) with no meaningful distance cost.
+The industrial corridor reveals the limits of fixed-budget decomposition
+in supply-constrained, geometrically dispersed settings:
+coverage retention drops to 93.2\% and the clustered solve takes longer
+than the global one.
+The overall message is that territorial decomposition is most effective
+in medium-to-large, well-supplied urban instances where candidate-set
+density is high enough for subproblems to be genuinely smaller than the
+global MILP.

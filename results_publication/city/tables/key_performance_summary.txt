@@ -1,16 +1,16 @@
 KEY PERFORMANCE SUMMARY — Less-Developed City (Villahermosa, Tabasco)
-Generated: 2026-06-24 20:20:26
+Generated: 2026-06-25 16:38:58
 
-The revised clustered model retains 98.4% of the global p-median coverage while reducing runtime by 2.8%, with a weighted mean distance difference of -1.2 metres.
+The proposed clustered model retains 97.9% of the global p-median coverage while reducing runtime by 1.5%, with a weighted mean distance difference of -0.4 metres.
 
-Revised proposed coverage    : 59.55%
+Proposed model coverage      : 59.26%
 Global P-Median coverage     : 60.51%
-Coverage retention           : 98.4%
+Coverage retention           : 97.9%
 
-Revised runtime              : 11.0 s
-Global runtime               : 11.3 s
-Runtime reduction            : 2.8%
+Proposed model runtime       : 11.2 s
+Global runtime               : 11.4 s
+Runtime reduction            : 1.5%
 
-Weighted mean distance (revised) : 215.6 m
+Weighted mean distance (proposed): 216.3 m
 Weighted mean distance (global)  : 216.7 m
-Distance difference              : -1.2 m
+Distance difference              : -0.4 m

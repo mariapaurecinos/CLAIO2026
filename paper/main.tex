@@ -1,0 +1,112 @@
+% ---------------------------------------------------------------
+% FOR OVERLEAF SUBMISSION (Springer LNCS / CLAIO2026):
+%   Replace the next two lines with:
+%     \documentclass[runningheads]{llncs}
+%   Overleaf has llncs.cls pre-installed.
+%   Remove \usepackage[margin=1in]{geometry} and the \maketitle redefinitions below.
+% ---------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------
+% Core packages
+% ---------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+\usepackage[capitalise,nameinlink]{cleveref}
+% \usepackage{microtype}  % enable on Overleaf; requires scalable fonts locally
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{parskip}
+\setlength{\parskip}{4pt}
+
+% ---------------------------------------------------------------
+% siunitx settings
+% ---------------------------------------------------------------
+\sisetup{
+  table-number-alignment = center,
+  detect-weight = true
+}
+
+% ---------------------------------------------------------------
+% Stub commands for LNCS compatibility
+% (delete when switching to llncs.cls on Overleaf)
+% ---------------------------------------------------------------
+\newcommand{\institute}[1]{\def\@institute{#1}}
+\newcommand{\titlerunning}[1]{}
+\newcommand{\authorrunning}[1]{}
+\newenvironment{keywords}{\par\smallskip\noindent\textbf{Keywords:} }{\par}
+
+% ---------------------------------------------------------------
+% Path for figures
+% ---------------------------------------------------------------
+\graphicspath{{figures/}}
+
+% ---------------------------------------------------------------
+\begin{document}
+
+\title{\textbf{A Graph-Based Geospatial Optimization Framework\\
+       for Retail Branch Expansion:\\[4pt]
+       Calibration, Baseline Comparison, and Cross-Context Validation}}
+
+\author{[Author names anonymized for review]\\
+        \small [Institution anonymized for review]}
+
+\date{}
+\maketitle
+
+% ---------------------------------------------------------------
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\begin{keywords}
+facility location $\cdot$ p-median $\cdot$ spectral clustering $\cdot$
+multiple correspondence analysis $\cdot$ geospatial optimization $\cdot$
+retail analytics $\cdot$ parameter calibration
+\end{keywords}
+
+% ---------------------------------------------------------------
+\input{introduction}
+\input{related_work}
+\input{methodology}
+\input{experiments}
+\input{discussion}
+\input{conclusion}
+
+% ---------------------------------------------------------------
+\subsubsection*{Acknowledgements}
+\input{acknowledgements}
+
+% ---------------------------------------------------------------
+\bibliographystyle{plain}
+\bibliography{refs}
+
+% ---------------------------------------------------------------
+\appendix
+\section{Reviewer-Response Mapping}
+\label{app:reviewer}
+
+\Cref{tab:reviewer} maps each reviewer concern to the paper section,
+experiment, and supporting evidence that addresses it.
+
+\begin{table}[h]
+  \centering
+  \caption{Reviewer-response mapping.}
+  \label{tab:reviewer}
+  \small
+  \input{tables/table_reviewer_response}
+\end{table}
+
+\end{document}

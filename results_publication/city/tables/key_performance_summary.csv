@@ -1,2 +1,2 @@
 experiment,label,revised_coverage_rate,global_coverage_rate,coverage_retention_vs_global,revised_runtime_s,global_runtime_s,runtime_reduction_vs_global,revised_w_mean_dist_m,global_w_mean_dist_m,w_distance_difference_vs_global_m
-city,"Less-Developed City (Villahermosa, Tabasco)",0.5955,0.6051,0.9841,11.03,11.35,0.0282,215.55,216.73,-1.18
+city,"Less-Developed City (Villahermosa, Tabasco)",0.5926,0.6051,0.9793,11.22,11.39,0.0149,216.34,216.73,-0.39

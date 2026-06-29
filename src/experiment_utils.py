@@ -1021,6 +1021,15 @@ def compute_pareto_frontier(
     df_out = df.copy()
     df_out["is_pareto"] = False
 
+    # Drop objectives that are entirely NaN — including them in dropna would
+    # silently eliminate every row and produce 0 Pareto-efficient points.
+    maximize_cols = [c for c in maximize_cols if df[c].notna().any()]
+    minimize_cols = [c for c in minimize_cols if df[c].notna().any()]
+    obj_cols = maximize_cols + minimize_cols
+
+    if not obj_cols:
+        return df_out
+
     df_clean = df.dropna(subset=obj_cols).copy()
     if len(df_clean) == 0:
         return df_out
@@ -1055,58 +1064,63 @@ def compute_pareto_frontier(
 def select_calibrated_params(
     df_grid: pd.DataFrame,
     p_total_fixed: int = 42,
-    weights: dict = None,
+    min_coverage: float = 0.45,
+    max_wdist: float = 235.0,
 ) -> dict:
-    """Select the highest-scoring Pareto-optimal configuration.
+    """Select the best balanced configuration from the grid search.
 
-    Scoring rule (default):
-        score = 0.40 × norm_w_coverage + 0.30 × norm_coverage
-              - 0.20 × norm_w_distance  - 0.10 × norm_runtime
+    Rule: among runs with coverage_rate >= min_coverage AND
+    w_mean_dist_m <= max_wdist, pick the one with the highest coverage
+    (ties broken by lowest w_mean_dist_m).
 
-    Returns dict with selected parameters and score.
+    Falls back to the Pareto-scored best if no run satisfies the constraints.
     """
-    weights = weights or {
-        "w_coverage_rate": 0.40,
-        "coverage_rate":   0.30,
-        "w_mean_dist_m":  -0.20,
-        "runtime_s":      -0.10,
-    }
+    _ok = df_grid[df_grid["solver_status"].isin(["OK", "Optimal"])].copy()
 
-    _g = df_grid[
-        (df_grid["p_total"] == p_total_fixed) &
-        (df_grid["solver_status"].isin(["OK", "Optimal"]))
-    ].copy().reset_index(drop=True)
+    # Prefer the p_total matching p_total_fixed; fall back to all
+    _pf = _ok[_ok["p_total"] == p_total_fixed]
+    if len(_pf) == 0:
+        _pf = _ok
 
-    if len(_g) == 0:
-        _g = df_grid[df_grid["solver_status"].isin(["OK", "Optimal"])].copy().reset_index(drop=True)
-
-    if len(_g) == 0:
+    if len(_pf) == 0:
         return {}
 
-    _g = compute_pareto_frontier(
-        _g,
-        maximize_cols=["coverage_rate", "w_coverage_rate"],
-        minimize_cols=["w_mean_dist_m", "runtime_s"],
-    )
-    pareto = _g[_g["is_pareto"]].copy()
-    if len(pareto) == 0:
-        pareto = _g.copy()
+    # Constraint zone: balanced coverage/distance trade-off
+    _zone = _pf[
+        (_pf["coverage_rate"] >= min_coverage) &
+        (_pf["w_mean_dist_m"] <= max_wdist)
+    ]
 
-    # Normalize objectives
-    def _norm(s):
-        rng = s.max() - s.min()
-        return (s - s.min()) / rng if rng > 0 else pd.Series(0.5, index=s.index)
+    if len(_zone) > 0:
+        best = _zone.sort_values(
+            ["coverage_rate", "w_mean_dist_m"], ascending=[False, True]
+        ).iloc[0]
+        n_candidates = len(_zone)
+    else:
+        # Fallback: Pareto-scored best (original behaviour)
+        _pf = compute_pareto_frontier(
+            _pf.reset_index(drop=True),
+            maximize_cols=["coverage_rate", "w_coverage_rate"],
+            minimize_cols=["w_mean_dist_m", "runtime_s"],
+        )
+        pareto = _pf[_pf["is_pareto"]].copy()
+        if len(pareto) == 0:
+            pareto = _pf.copy()
 
-    pareto = pareto.copy()
-    pareto["score"] = 0.0
-    for col, w in weights.items():
-        if col in pareto.columns:
-            normed = _norm(pareto[col].astype(float))
-            if w < 0:
-                normed = 1.0 - normed
-            pareto["score"] += abs(w) * normed
+        def _norm(s):
+            rng = s.max() - s.min()
+            return (s - s.min()) / rng if rng > 0 else pd.Series(0.5, index=s.index)
 
-    best = pareto.loc[pareto["score"].idxmax()]
+        pareto["score"] = 0.0
+        for col, w in {"coverage_rate": 0.60, "w_mean_dist_m": -0.40}.items():
+            if col in pareto.columns:
+                normed = _norm(pareto[col].astype(float))
+                if w < 0:
+                    normed = 1.0 - normed
+                pareto["score"] += abs(w) * normed
+
+        best = pareto.loc[pareto["score"].idxmax()]
+        n_candidates = len(pareto)
 
     return {
         "D_MAX":           float(best.get("D_MAX", np.nan)),
@@ -1117,8 +1131,7 @@ def select_calibrated_params(
         "w_coverage_rate": float(best.get("w_coverage_rate", np.nan)),
         "w_mean_dist_m":   float(best.get("w_mean_dist_m", np.nan)),
         "runtime_s":       float(best.get("runtime_s", np.nan)),
-        "score":           float(best["score"]),
-        "n_pareto_points": int(len(pareto)),
+        "n_pareto_points": int(n_candidates),
     }
 
 

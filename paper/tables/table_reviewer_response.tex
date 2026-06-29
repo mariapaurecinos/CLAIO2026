@@ -1,0 +1,68 @@
+\begin{tabular}{p{4.5cm}p{2.2cm}p{3.2cm}p{1.5cm}}
+\toprule
+\textbf{Reviewer concern}
+  & \textbf{Paper section}
+  & \textbf{Evidence}
+  & \textbf{Status} \\
+\midrule
+No baseline comparison to simpler alternatives (k-means, no-clustering)
+  & \cref{ssec:baselines}, \cref{tab:baselines}
+  & B1–B4 fair comparison, all network-evaluated
+  & \textbf{Addressed} \\
+\addlinespace
+Key parameters ($D_{\max}$, $S_{\min}$, $\beta$, $K$) set without justification
+  & \cref{ssec:calibration}, \cref{sec:sensitivity}
+  & 81-point Pareto grid search; sensitivity figures
+  & \textbf{Addressed} \\
+\addlinespace
+Assigning 7 openings per cluster regardless of cluster size
+  & \cref{ssec:allocation}, \cref{tab:allocation}
+  & Proportional demand-weighted allocation rule
+  & \textbf{Addressed} \\
+\addlinespace
+No Euclidean baseline; network distances not justified over Euclidean
+  & \cref{ssec:baselines}, \cref{fig:euclidean_inflation}
+  & B3 shows 10--20\% coverage loss from Euclidean solve
+  & \textbf{Addressed} \\
+\addlinespace
+Cluster-wise optimization may lose global optimality
+  & \cref{ssec:crosscase}, \cref{tab:crosscase}
+  & Coverage retention 93--100\% vs.\ global B1
+  & \textbf{Addressed} \\
+\addlinespace
+Low coverage (44\%) not analyzed or justified
+  & \cref{sec:sensitivity}, \cref{tab:budget}
+  & Budget sensitivity analysis; coverage is budget-constrained
+  & \textbf{Addressed} \\
+\addlinespace
+MCA weighting lacks analytical interpretation
+  & \cref{ssec:mca}, \cref{ssec:baselines}
+  & $\beta$ sensitivity, B4 no-MCA, biplot interpretation
+  & \textbf{Addressed} \\
+\addlinespace
+Lack of external validation (sales, foot traffic)
+  & \cref{sec:discussion}
+  & Acknowledged as limitation; internal optimality validated vs.\ B1
+  & \textit{Partial} \\
+\addlinespace
+Threshold for underserved blocks (321~m) not justified
+  & \cref{ssec:network}, \cref{sec:sensitivity}
+  & $\tau$ sensitivity; threshold mirrors empirical inter-store spacing
+  & \textbf{Addressed} \\
+\addlinespace
+Contribution is engineering rather than novel algorithmic
+  & \cref{sec:intro}, \cref{sec:conclusion}
+  & Contribution framed as calibrated computational framework; cross-context validation
+  & \textbf{Addressed} \\
+\addlinespace
+No sensitivity analysis for key parameters
+  & \cref{sec:sensitivity}, \cref{fig:sensitivity_panels}
+  & Full sensitivity panels for $\tau$, $\beta$, $K$, budget
+  & \textbf{Addressed} \\
+\addlinespace
+Related work lacks critical comparison
+  & \cref{sec:related}
+  & Thematic comparison across p-median, clustering, and MCA literature
+  & \textbf{Addressed} \\
+\bottomrule
+\end{tabular}

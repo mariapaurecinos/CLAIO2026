@@ -1,0 +1,34 @@
+\begin{tabular}{lllll}
+\toprule
+\textbf{Parameter} & \textbf{Meaning}
+  & \textbf{Student} & \textbf{City} & \textbf{Industrial} \\
+\midrule
+$D_{\max}$ (m)
+  & Service radius
+  & 300 & 366 & 450 \\
+$S_{\min}$ (m)
+  & Min.\ candidate separation
+  & 200 & 200 & 200 \\
+$\beta$
+  & MCA demand weight
+  & 0.10 & 0.25 & 0.25 \\
+$K$
+  & KNN affinity count
+  & 12 & 12 & 12 \\
+$\tau$
+  & Candidate threshold multiplier
+  & 1.0 & 1.0 & 1.0 \\
+$\bar{d}_{\text{nn}} \cdot \tau$ (m)
+  & Resulting threshold
+  & 322 & 484 & 1{,}315 \\
+$P_{\text{total}}$
+  & Total opening budget
+  & 42 & 42 & 42 \\
+$\lambda$
+  & Uncovered-demand penalty
+  & 5{,}000 & 5{,}000 & 5{,}000 \\
+\midrule
+\multicolumn{2}{l}{Grid-search combinations evaluated} & \multicolumn{3}{r}{81 per instance} \\
+\multicolumn{2}{l}{Calibration criterion} & \multicolumn{3}{r}{Pareto-optimal (coverage, distance)} \\
+\bottomrule
+\end{tabular}

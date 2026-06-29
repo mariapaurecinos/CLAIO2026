@@ -1,0 +1,90 @@
+\begin{thebibliography}{10}
+
+\bibitem{avella2007lagrangian}
+P.~Avella, A.~Sassano, and I.~Vasil'ev.
+\newblock Computational study of large-scale {p}-median problems.
+\newblock {\em Mathematical Programming}, 109:89--114, 2007.
+
+\bibitem{boeing2017osmnx}
+G.~Boeing.
+\newblock {OSMnx}: New methods for acquiring, constructing, analyzing, and visualizing complex street networks.
+\newblock {\em Computers, Environment and Urban Systems}, 65:126--139, 2017.
+
+\bibitem{daskin1995network}
+M.~S. Daskin.
+\newblock Network and discrete location: Models, algorithms, and applications.
+\newblock 1995.
+
+\bibitem{greenacre1988correspondence}
+M.~J. Greenacre.
+\newblock {\em Correspondence Analysis in Practice}.
+\newblock Academic Press, London, 1988.
+
+\bibitem{greenacre1991interpreting}
+M.~J. Greenacre.
+\newblock Interpreting multiple correspondence analysis.
+\newblock {\em Applied Stochastic Models and Data Analysis}, 7(2):195--210, 1991.
+
+\bibitem{greenacre2017correspondence}
+M.~J. Greenacre.
+\newblock {\em Correspondence Analysis in Practice}.
+\newblock CRC Press, Boca Raton, 3rd edition, 2017.
+
+\bibitem{greenacre2006multiple}
+M.~J. Greenacre and J.~Blasius, editors.
+\newblock {\em Multiple Correspondence Analysis and Related Methods}.
+\newblock Chapman \& Hall/CRC, Boca Raton, 2006.
+
+\bibitem{hakimi1964optimum}
+S.~L. Hakimi.
+\newblock Optimum locations of switching centers and the absolute centers and medians of a graph.
+\newblock {\em Operations Research}, 12(3):450--459, 1964.
+
+\bibitem{inegi2024denue}
+{Instituto Nacional de Estad{\'i}stica y Geograf{\'i}a (INEGI)}.
+\newblock Directorio estad{\'i}stico nacional de unidades econ{\'o}micas ({DENUE}), 2024 edition, 2024.
+
+\bibitem{inegi2025mdm}
+{Instituto Nacional de Estad{\'i}stica y Geograf{\'i}a (INEGI)}.
+\newblock Mapa digital de m{\'e}xico ({MDM6}), 2025.
+
+\bibitem{lorena2003constructive}
+L.~A.~N. Lorena and E.~L.~F. Senne.
+\newblock A column generation approach to capacitated {p}-median problems.
+\newblock {\em Computers \& Operations Research}, 31(6):863--876, 2004.
+
+\bibitem{maranzana1964siting}
+F.~E. Maranzana.
+\newblock On the location of supply points to minimise transport costs.
+\newblock {\em Journal of the Operational Research Society}, 15(3):261--270, 1964.
+
+\bibitem{ng2002spectral}
+A.~Y. Ng, M.~I. Jordan, and Y.~Weiss.
+\newblock On spectral clustering: Analysis and an algorithm.
+\newblock In {\em Advances in Neural Information Processing Systems}, volume~14, pages 849--856. MIT Press, 2002.
+
+\bibitem{osm2025}
+{OpenStreetMap contributors}.
+\newblock {OpenStreetMap}, 2025.
+
+\bibitem{shi2000normalized}
+J.~Shi and J.~Malik.
+\newblock Normalized cuts and image segmentation.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 22(8):888--905, 2000.
+
+\bibitem{tadic2023locating}
+S.~Tadi{\'c}, M.~Krsti{\'c}, {\v Z}.~Stevi{\'c}, and M.~Veljovi{\'c}.
+\newblock Locating collection and delivery points using the {p}-median location problem.
+\newblock {\em Logistics}, 7(1):10, 2023.
+
+\bibitem{theodoridis2009clustering}
+S.~Theodoridis and K.~Koutroumbas.
+\newblock Clustering algorithms {IV}.
+\newblock In {\em Pattern Recognition}, pages 765--862. Academic Press, 4th edition, 2009.
+
+\bibitem{vonluxburg2007tutorial}
+U.~von Luxburg.
+\newblock A tutorial on spectral clustering.
+\newblock {\em Statistics and Computing}, 17(4):395--416, 2007.
+
+\end{thebibliography}

@@ -1,8 +1,8 @@
 {
   "experiment": "city",
   "label": "Less-Developed City",
-  "run_timestamp": "2026-06-24T18:17:41",
-  "git_hash": "b803c16b6666315ec69819a1e1b504905f74243a",
+  "run_timestamp": "2026-06-25T16:32:23",
+  "git_hash": "514144e7b8b9141cdecf008b5d1abe8384cb7659",
   "python_version": "3.12.2",
   "library_versions": {
     "osmnx": "2.1.0",
@@ -23,35 +23,38 @@
     "n_existing_stores": 75,
     "n_active_demand_nodes": 2074,
     "n_candidate_blocks": 1256,
-    "n_clusters": 5,
+    "n_clusters": 6,
     "cluster_sizes": [
-      734,
-      708,
+      636,
+      617,
       396,
       278,
-      244
+      218,
+      215
     ]
   },
   "results": {
-    "n_new_openings": 35,
-    "n_covered_demand_nodes": 1125,
+    "n_new_openings": 42,
+    "n_covered_demand_nodes": 1208,
     "n_demands_total": 2074,
-    "coverage_rate": 0.54243,
-    "unweighted_mean_distance_m": 220.1232,
-    "weighted_mean_distance_m": 217.5642,
+    "coverage_rate": 0.582449,
+    "unweighted_mean_distance_m": 216.5437,
+    "weighted_mean_distance_m": 212.834,
     "cluster_coverage_rates": {
-      "0": 0.4961,
-      "1": 0.3772,
+      "0": 0.5324,
+      "1": 0.4283,
       "2": 0.6433,
       "3": 0.918,
-      "4": 0.566
+      "4": 0.5926,
+      "5": 0.6162
     },
     "cluster_weighted_coverage_rates": {
-      "0": 0.5578,
-      "1": 0.4141,
+      "0": 0.6081,
+      "1": 0.4673,
       "2": 0.6639,
       "3": 0.9481,
-      "4": 0.6667
+      "4": 0.6824,
+      "5": 0.7096
     }
   },
   "mca": {
@@ -73,10 +76,10 @@
   "baseline_comparison": [
     {
       "model": "Proposed (spectral + MCA)",
-      "coverage_rate": 0.5424,
-      "w_mean_dist_m": 217.56,
-      "n_covered": 1125,
-      "n_openings": 35,
+      "coverage_rate": 0.5824,
+      "w_mean_dist_m": 212.83,
+      "n_covered": 1208,
+      "n_openings": 42,
       "solver_status": "OK"
     },
     {
@@ -89,26 +92,26 @@
     },
     {
       "model": "B2: K-Means + P-Median",
-      "coverage_rate": 0.5559,
-      "w_mean_dist_m": 217.24,
-      "n_covered": 1153,
-      "n_openings": 35,
+      "coverage_rate": 0.595,
+      "w_mean_dist_m": 210.96,
+      "n_covered": 1234,
+      "n_openings": 42,
       "solver_status": "OK"
     },
     {
       "model": "B3: Euclidean distances",
-      "coverage_rate": 0.7155,
-      "w_mean_dist_m": 194.28,
-      "n_covered": 1484,
-      "n_openings": 35,
+      "coverage_rate": 0.7777,
+      "w_mean_dist_m": 197.61,
+      "n_covered": 1613,
+      "n_openings": 42,
       "solver_status": "OK"
     },
     {
       "model": "B4: No MCA (\u03b2=0)",
-      "coverage_rate": 0.5444,
-      "w_mean_dist_m": 215.32,
-      "n_covered": 1129,
-      "n_openings": 35,
+      "coverage_rate": 0.5863,
+      "w_mean_dist_m": 213.64,
+      "n_covered": 1216,
+      "n_openings": 42,
       "solver_status": "OK"
     }
   ],
@@ -116,7 +119,7 @@
     "threshold_multiplier_chosen": 1.0,
     "knn_k_chosen": 12,
     "beta_chosen": 0.25,
-    "grid_search_n_combinations": 0,
-    "grid_search_pareto_n": 0
+    "grid_search_n_combinations": 81,
+    "grid_search_pareto_n": 14
   }
 }

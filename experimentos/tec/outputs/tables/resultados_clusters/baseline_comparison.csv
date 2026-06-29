@@ -1,6 +1,6 @@
 model,coverage_rate,w_mean_dist_m,n_covered,runtime_s,solver_status,n_openings,n_demands,coverage_pct
-Proposed (spectral + MCA),0.4451,223.29,2106,,OK,42,4731,44.51
-B1: Global P-Median (no clustering),0.4671,228.99,2210,75.77,OK,42,4731,46.71
-B2: K-Means + P-Median,0.4602,226.44,2177,31.72,OK,42,4731,46.02
-B3: Euclidean distances,0.6588,224.04,3117,38.87,OK,42,4731,65.88
-B4: No MCA (β=0),0.4564,224.8,2159,29.9,OK,42,4731,45.64
+Proposed (spectral + MCA),0.446,223.29,2110,,OK,42,4731,44.6
+B1: Global P-Median (no clustering),0.4676,228.99,2212,169.42,OK,42,4731,46.76
+B2: K-Means + P-Median,0.4595,226.44,2174,54.16,OK,42,4731,45.95
+B3: Euclidean distances,0.6584,224.04,3115,69.57,OK,42,4731,65.84
+B4: No MCA (β=0),0.4564,224.8,2159,54.69,OK,42,4731,45.64

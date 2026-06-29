@@ -1,0 +1,12 @@
+{
+  "D_MAX": 300.0,
+  "S_MIN": 200.0,
+  "beta": 0.1,
+  "p_total": 42,
+  "coverage_rate": 0.5318,
+  "w_coverage_rate": NaN,
+  "w_mean_dist_m": 171.91,
+  "runtime_s": 7.54,
+  "score": 0.26215593830716594,
+  "source": "grid-search balanced scoring"
+}

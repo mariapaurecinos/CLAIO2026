@@ -1,0 +1,77 @@
+\section{Introduction}
+\label{sec:intro}
+
+Retail expansion in urban areas involves a class of decisions that is structurally
+different from classical facility location in two important respects.
+First, the set of feasible locations is heterogeneous: some blocks are already
+served by existing stores, some lack the pedestrian connectivity needed to
+attract walk-in traffic, and some exhibit socioeconomic profiles that make
+demand volumes hard to estimate from population counts alone.
+Second, operational constraints—minimum separation between openings,
+service radii calibrated to walking time, and budget limits allocated
+across operating territories—impose combinatorial structure that Euclidean
+approximations cannot capture faithfully.
+
+Classical \mbox{p-median} models minimize total demand-weighted assignment
+distance~\cite{hakimi1964optimum} and have been applied extensively to
+retail, public facility, and logistics network design~\cite{daskin1995network,%
+tadic2023locating}.
+However, in practice these models are typically deployed at a scale where
+solving a single global instance is computationally tractable, and their
+demand weights are constructed from scalar population counts that discard
+qualitative urban-environment information.
+The contribution of this work is a computational framework that addresses
+both limitations simultaneously.
+
+The pipeline combines four layers:
+(\textit{i})~a pedestrian street network derived from
+OpenStreetMap~\cite{osm2025} and processed with OSMnx~\cite{boeing2017osmnx},
+which replaces Euclidean proximity with shortest-path distance to
+capture real access effort;
+(\textit{ii})~graph-based spectral clustering~\cite{ng2002spectral,%
+vonluxburg2007tutorial}, which partitions the study area into operationally
+coherent territories by exploiting road-network affinity rather than
+Euclidean geometry;
+(\textit{iii})~multiple correspondence analysis~(MCA)~\cite{greenacre2017correspondence},
+which compresses 33 categorical socio-urban census indicators into a single
+interpretable demand modifier; and
+(\textit{iv})~a \mbox{p-median} model solved independently in each cluster
+with coverage-radius, minimum-separation, and uncovered-demand-penalty
+constraints.
+
+A key methodological addition relative to the original formulation is
+\textit{parameter calibration through multi-objective sensitivity analysis}.
+The service radius~$D_{\max}$, the MCA weight~$\beta$, and the candidate-block
+threshold are jointly optimized over an 81-point Pareto grid rather than
+fixed by convention.
+A second addition is a \textit{demand-proportional budget allocation} rule that
+distributes the total opening budget across clusters according to their
+weighted demand share, removing the fixed-seven-per-cluster rule that generated
+artificial inequity in the original submission.
+
+The framework is validated across three urban contexts in Mexico that differ
+substantially in commercial maturity and spatial density, and is compared
+against four baselines—all evaluated under consistent pedestrian-network
+distance—to allow fair performance attribution.
+
+The main contributions of this paper are:
+\begin{itemize}
+  \item A calibrated, parameter-justified facility-location pipeline in which
+        $D_{\max}$, $\beta$, and the candidate threshold are selected from
+        a Pareto-optimal grid search rather than set \textit{a priori}
+        (\cref{sec:methodology}).
+  \item A demand-proportional cluster-budget allocation rule that replaces
+        the fixed-per-cluster opening count and reduces inter-cluster
+        coverage inequity (\cref{sec:methodology}).
+  \item A rigorous baseline comparison that isolates the contribution of
+        network distances, spectral clustering, and MCA weighting through
+        four controlled variants, all evaluated under pedestrian-network
+        distance (\cref{sec:experiments}).
+  \item A cross-context validation across three urban settings that exhibit
+        qualitatively different store-supply densities and street
+        connectivity patterns (\cref{sec:experiments}).
+  \item Empirical evidence that coverage loss from territorial decomposition
+        remains below~$7$\% in all tested instances, and that Euclidean-solve
+        models underestimate mean assignment distance by up to~$20$\%
+        relative to network evaluation (\cref{sec:results}).
+\end{itemize}

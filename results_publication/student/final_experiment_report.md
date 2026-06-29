@@ -1,6 +1,6 @@
 # Final Experiment Report — Tecnológico de Monterrey student area
 
-Generated: 2026-06-24 20:02:54
+Generated: 2026-06-26 12:11:30
 Experiment: student
 
 ## Instance
@@ -28,21 +28,19 @@ Experiment: student
 
 | Model | Coverage (%) | W-Coverage (%) | W-Mean Dist (m) | Runtime (s) |
 |-------|-------------|----------------|-----------------|-------------|
-| Original proposed | 45.57 | 47.79 | 223.3 | N/A |
-| Revised proposed | 47.77 | 49.38 | 227.8 | 25.8 |
-| Global P-Median (B1) | 47.83 | N/A | 229.0 | 70.6 |
+| Proposed model | 47.77 | 49.38 | 227.8 | 27.5 |
+| Global P-Median (B1) | 47.83 | N/A | 229.0 | 76.3 |
 
 ## Key Performance Metrics
 
 - **Coverage retention vs global**: 99.9%
-- **Runtime reduction vs global**: 63.4%
+- **Runtime reduction vs global**: 63.9%
 - **Weighted distance difference vs global**: -1.2 m
 
 ## Main Conclusion
 
-The revised clustered model retains 99.9% of the global p-median coverage
-while reducing runtime by 63.4%. The proportional allocation corrects the
-equity problem of fixed-7 assignment. The weighted mean assignment distance differs
+The proposed clustered model retains 99.9% of the global p-median coverage
+while reducing runtime by 63.9%. The weighted mean assignment distance differs
 by only -1.2 m from the global optimum.
 
 Parameters were calibrated through multi-objective sensitivity analysis (Pareto frontier

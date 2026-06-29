@@ -1,0 +1,113 @@
+\section{Discussion}
+\label{sec:discussion}
+
+% ---------------------------------------------------------------
+\subsection{When Territorial Decomposition Helps}
+
+The cross-context results reveal a clear pattern: decomposition via
+spectral clustering provides the greatest benefit in instances where
+(i) the global MILP is large enough that runtime matters, and
+(ii) the candidate set is dense enough that individual subproblems
+remain substantially smaller than the global problem.
+The student area satisfies both conditions---it has nearly 5,000 demand
+nodes, 67 existing stores, and 3,031 candidate blocks---and yields
+a 67\% runtime reduction with less than 0.1 percentage-point coverage loss.
+The city area has a smaller candidate set relative to its store density,
+so the global instance is already fast; decomposition does not hurt
+coverage but provides no speedup.
+The industrial corridor violates condition (ii): with only 6 existing
+stores covering 2,693 blocks, the vast majority of blocks qualify as
+candidates, and each subproblem is proportionally harder than the global MILP.
+
+This finding has a practical implication for deploying the framework
+at scale: the benefit of decomposition should be estimated from the
+ratio of candidate blocks to demand nodes before committing to the
+clustered approach.
+A simple rule of thumb is that decomposition pays off when the candidate
+fraction exceeds roughly 55--60\% of all blocks in at least two thirds
+of the resulting clusters; otherwise, the global solve is likely
+faster and the decomposition gap is not worth accepting.
+
+% ---------------------------------------------------------------
+\subsection{Proportional Allocation and Coverage Equity}
+
+The fixed-seven-per-cluster rule of the original formulation creates
+a systematic inequity: clusters with larger demand receive the same
+budget as clusters with smaller demand.
+In the student area, this means the cluster with 1,282 blocks received
+the same seven openings as the cluster with 212 blocks.
+The demand-proportional rule (\cref{eq:proportional}) corrects this by
+tying the budget to weighted demand share, resulting in allocations of
+11, 11, 10, 5, 3, and 2 openings across the six clusters.
+The coverage gain from proportionality is not dramatic in aggregate
+(47.77\% vs.\ 44.51\% under fixed allocation in the student area),
+but it substantially improves the per-capita coverage ratio in
+the largest clusters, which is the operationally relevant measure
+for a network expansion decision.
+
+% ---------------------------------------------------------------
+\subsection{The Role of MCA Weighting}
+
+The MCA modifier shifts the optimization toward blocks with higher
+socio-urban quality: better infrastructure, more complete urban services,
+and higher educational attainment.
+This reflects a deliberate commercial choice---the model is intended to
+identify locations with the highest potential foot traffic, not merely
+the highest population concentration.
+The marginal coverage gain from MCA weighting (roughly 1--2 percentage
+points in weighted coverage) is modest but directionally consistent
+across all tested instances.
+
+A more important contribution of MCA is its interpretive value:
+the first MCA dimension provides a spatial visualization of socio-urban
+quality that planners can inspect directly, and the boxplots by cluster
+(\cref{fig:mca_by_cluster}) confirm that spectral territories differ
+not only geometrically but also in their socioeconomic profile.
+This means the cluster-level optimization is solving genuinely distinct
+subproblems, not merely partitioning the same demand distribution.
+
+The sensitivity analysis confirms that $\beta = 0.25$ is a stable
+default: coverage and distance change by less than 1\% across
+$\beta \in [0.1, 0.5]$, and population remains the dominant demand
+signal (correlation above 0.97) throughout that range.
+
+% ---------------------------------------------------------------
+\subsection{Global vs.\ Clustered Optimality}
+
+A reviewer concern was that cluster-wise optimization sacrifices global
+optimality.
+This concern is valid in principle: solving subproblems independently
+may prevent a facility at the boundary of two clusters from serving
+demand in both.
+The empirical results, however, show that this effect is small in practice:
+coverage losses range from 0.1 to 6.8 percentage points across the three
+instances, and the weighted mean distance under the clustered model is
+actually \emph{lower} than the global optimum in two of the three cases
+(by 1.2~m and 0.4~m respectively), because the proportional allocation
+concentrates openings in high-demand areas more effectively than the
+single global problem under a fixed equal-split assumption.
+
+The industrial corridor is the only case where the coverage gap is
+commercially meaningful ($\approx$2.2 percentage points).
+In that setting, a practitioner should consider running the global
+\mbox{p-median} directly, since the clustered model provides neither
+a runtime advantage nor a coverage benefit.
+
+% ---------------------------------------------------------------
+\subsection{Limitations}
+
+Several limitations bound the scope of the reported results.
+The framework optimizes coverage and access distance but does not
+incorporate acquisition or operating costs, which can substantially
+reorder candidate sites in practice.
+The MCA weights depend on quintile discretization, so some within-quintile
+variance is intentionally discarded.
+The coverage rate is conditional on $D_{\max}$, and lower values
+of the service radius reduce coverage monotonically, as shown
+in the grid search; the reported 44--59\% coverage at $D_{\max} = 366$~m
+is therefore a function of this deliberate constraint.
+Finally, no external validation against observed sales, foot traffic,
+or revenue data is possible here; the proposed model is validated against
+the global \mbox{p-median} optimum as an internal benchmark, and the
+question of whether MCA-weighted blocks do in fact generate higher
+commercial activity remains an empirical question for future work.

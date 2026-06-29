@@ -1,0 +1,39 @@
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{Study area} & \textbf{Model}
+  & \textbf{Cov.\ (\%)}
+  & \textbf{W-cov.\ (\%)}
+  & \textbf{W-dist.\ (m)}
+  & \textbf{RT (s)} \\
+\midrule
+\multirow{5}{*}{\textit{Student}}
+  & Proposed (spectral + MCA)  & \textbf{47.77} & \textbf{49.38} & 227.8 & \textbf{25.9} \\
+  & B1: Global p-median        & 47.83 & —     & 229.0 & 78.5 \\
+  & B2: k-means + p-median     & 47.31 & 48.87 & 226.7 & 31.6 \\
+  & B3: Euclidean solve$^\dagger$ & 39.02 & 39.10 & 221.8 & 30.7 \\
+  & B4: No MCA ($\beta=0$)     & 45.64 & 47.76 & 224.4 & 30.3 \\
+\midrule
+\multirow{5}{*}{\textit{City}}
+  & Proposed (spectral + MCA)  & \textbf{59.26} & \textbf{64.47} & 216.3 & \textbf{11.2} \\
+  & B1: Global p-median        & 60.51 & —     & 216.7 & 11.4 \\
+  & B2: k-means + p-median     & 59.50 & 64.23 & 210.9 & 12.4 \\
+  & B3: Euclidean solve$^\dagger$ & 49.57 & 52.70 & 204.3 & 24.8 \\
+  & B4: No MCA ($\beta=0$)     & 58.87 & 63.80 & 214.1 & 11.1 \\
+\midrule
+\multirow{5}{*}{\textit{Industrial}}
+  & Proposed (spectral + MCA)  & \textbf{30.19} & \textbf{33.11} & 197.0 & 29.1 \\
+  & B1: Global p-median        & 32.38 & —     & 203.8 & \textbf{19.0} \\
+  & B2: k-means + p-median     & 25.55 & 28.04 & 208.7 & 20.0 \\
+  & B3: Euclidean solve$^\dagger$ & 14.48 & 15.31 & 198.1 & 38.6 \\
+  & B4: No MCA ($\beta=0$)     & 20.35 & 23.00 & 206.6 & 22.0 \\
+\bottomrule
+\end{tabular}
+
+\smallskip\noindent
+{\footnotesize $^\dagger$ B3 is solved with Euclidean distances but
+  re-evaluated on the pedestrian network; the coverage drop measures
+  Euclidean bias under network evaluation. All other models use
+  network distances in both solving and evaluation.}
+\smallskip\noindent
+{\footnotesize Bold: best result per column within each study area
+  (excluding B1 for runtime, which is the reference model).}

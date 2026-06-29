@@ -1,0 +1,5 @@
+configuration_label,D_MAX,S_MIN,beta,coverage_rate,weighted_coverage_rate,weighted_mean_dist_m,runtime_s,decision_rationale
+Balanced calibrated (selected),300.0,200.0,0.1,0.5318,,171.91,7.54,Highest balanced score: 0.35·w_cov + 0.25·cov − 0.25·w_dist − 0.15·rt
+High-coverage option,450.0,200.0,0.1,0.7445,,244.38,15.19,Highest coverage_rate in valid grid
+Low-distance option,300.0,200.0,0.1,0.3973,,171.25,6.62,Lowest w_mean_dist_m in valid grid
+Original-paper reference,366.0,240.0,0.25,0.5063,,217.12,11.74,"D_MAX=366, S_MIN=240, beta=0.25 (paper submission)"

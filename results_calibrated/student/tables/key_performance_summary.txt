@@ -1,0 +1,1 @@
+The calibrated clustered model retains 99.9% of the global p-median coverage while reducing runtime by 63.9%, with a weighted mean distance difference of -1.2 meters.

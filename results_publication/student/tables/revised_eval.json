@@ -1,5 +1,5 @@
 {
-  "model": "Revised proposed (spectral + MCA, proportional)",
+  "model": "Proposed model (spectral + MCA, proportional)",
   "allocation_rule": "proportional (demand-weighted)",
   "solve_distance": "network",
   "eval_distance": "network",
@@ -12,7 +12,7 @@
   "n_covered": 2260,
   "n_demands": 4731,
   "n_openings": 42,
-  "runtime_s": 25.82,
+  "runtime_s": 27.52,
   "eval_runtime_s": 0.05,
   "solver_status": "OK",
   "coverage_pct": 47.77,
