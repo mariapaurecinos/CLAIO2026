@@ -1,0 +1,16 @@
+KEY PERFORMANCE SUMMARY — Industrial study area
+Generated: 2026-06-29 15:11:35
+
+The proposed clustered model retains 93.7% of the global p-median coverage while reducing runtime by 73.2%, with a weighted mean distance difference of -6.0 metres.
+
+Proposed model coverage      : 75.79%
+Global P-Median coverage     : 80.90%
+Coverage retention           : 93.7%
+
+Proposed model runtime       : 2.5 s
+Global runtime               : 9.4 s
+Runtime reduction            : 73.2%
+
+Weighted mean distance (proposed): 194.4 m
+Weighted mean distance (global)  : 200.4 m
+Distance difference              : -6.0 m

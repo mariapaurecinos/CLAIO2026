@@ -1,0 +1,2 @@
+study_area,D_MAX_calibrated,S_MIN_calibrated,beta_calibrated,proposed_coverage_rate,global_pmedian_coverage_rate,coverage_retention_vs_global,proposed_runtime_s,global_pmedian_runtime_s,runtime_reduction_vs_global,proposed_weighted_mean_dist_m,global_pmedian_weighted_dist_m,weighted_distance_diff_m
+industrial,450.0,200.0,0.25,0.7579,0.809,0.9368,2.51,9.37,0.7321,194.44,200.45,-6.01

@@ -1,0 +1,7 @@
+Parameter,Chosen,Justification
+D_MAX (m),450.0,~5-min walk at 1.22 m/s; best grid-search coverage at D_MAX=450
+S_MIN (m),200.0,Minimum candidate spacing; prevents clustering of new openings
+β (MCA weight),0.1,β=0.1 preserves pop-MCA correlation; sensitivity sweep confirms stability
+K (KNN affinity),12.0,Eigengap-selected k*; validated by silhouette score in spectral embedding
+Threshold multiplier,1.0,1.0 × avg_nn_m = 169.1 m mirrors empirical existing-store spacing
+P_total,9.0,Budget: 42 new openings (comparable across all models)

@@ -1,0 +1,140 @@
+{
+  "experiment": "industrial",
+  "label": "Industrial Area",
+  "run_timestamp": "2026-06-29T15:08:57",
+  "git_hash": "71346e3cb49eaa5e8a7ba26de1946c19c25c7543",
+  "python_version": "3.12.2",
+  "library_versions": {
+    "osmnx": "2.1.0",
+    "geopandas": "1.1.1",
+    "scikit_learn": "1.7.2",
+    "pulp": "3.3.2",
+    "prince": "0.19.0",
+    "numpy": "2.3.3",
+    "pandas": "2.3.2"
+  },
+  "study_area": {
+    "center_lat": 19.427,
+    "center_lon": -99.16768,
+    "radius_km": 5.0
+  },
+  "instance": {
+    "n_census_blocks": 1724,
+    "n_existing_stores": 457,
+    "n_active_demand_nodes": 1450,
+    "n_candidate_blocks": 1040,
+    "n_clusters": 11,
+    "cluster_sizes": [
+      212,
+      202,
+      198,
+      182,
+      161,
+      156,
+      142,
+      131,
+      130,
+      112,
+      98
+    ]
+  },
+  "results": {
+    "n_new_openings": 77,
+    "n_covered_demand_nodes": 1240,
+    "n_demands_total": 1450,
+    "coverage_rate": 0.855172,
+    "unweighted_mean_distance_m": 189.9327,
+    "weighted_mean_distance_m": 177.2467,
+    "cluster_coverage_rates": {
+      "0": 0.5227,
+      "1": 0.6897,
+      "2": 0.9524,
+      "3": 0.9677,
+      "4": 0.9783,
+      "5": 0.7846,
+      "6": 0.9008,
+      "7": 1.0,
+      "8": 0.9259,
+      "9": 0.9341,
+      "10": 0.974
+    },
+    "cluster_weighted_coverage_rates": {
+      "0": 0.66,
+      "1": 0.7952,
+      "2": 0.9787,
+      "3": 0.9465,
+      "4": 0.9929,
+      "5": 0.8764,
+      "6": 0.9425,
+      "7": 1.0,
+      "8": 0.9779,
+      "9": 0.988,
+      "10": 0.982
+    }
+  },
+  "mca": {
+    "dim1_corrected_inertia": 0.505784,
+    "dim2_corrected_inertia": 0.465819
+  },
+  "params_used": {
+    "D_MAX": 366.0,
+    "S_MIN": 240.0,
+    "BETA": 0.25,
+    "P_NEW_MODE": "fixed",
+    "P_NEW_PER_CLUSTER": 7,
+    "P_NEW_TOTAL": 42,
+    "PENALTY_UNCOVERED": 5000.0,
+    "K_NEIGH_EUCLIDEAN": 12,
+    "MIN_CLUSTER_SIZE": 200,
+    "RANDOM_SEED": 42
+  },
+  "baseline_comparison": [
+    {
+      "model": "Proposed (spectral + MCA)",
+      "coverage_rate": 0.8552,
+      "w_mean_dist_m": 177.25,
+      "n_covered": 1240,
+      "n_openings": 77,
+      "solver_status": "OK"
+    },
+    {
+      "model": "B1: Global P-Median (no clustering)",
+      "coverage_rate": 0.8083,
+      "w_mean_dist_m": 200.45,
+      "n_covered": 1172,
+      "n_openings": 42,
+      "solver_status": "OK"
+    },
+    {
+      "model": "B2: K-Means + P-Median",
+      "coverage_rate": 0.8972,
+      "w_mean_dist_m": 182.14,
+      "n_covered": 1301,
+      "n_openings": 77,
+      "solver_status": "OK"
+    },
+    {
+      "model": "B3: Euclidean distances",
+      "coverage_rate": 0.9559,
+      "w_mean_dist_m": 148.11,
+      "n_covered": 1386,
+      "n_openings": 77,
+      "solver_status": "OK"
+    },
+    {
+      "model": "B4: No MCA (\u03b2=0)",
+      "coverage_rate": 0.8614,
+      "w_mean_dist_m": 174.59,
+      "n_covered": 1249,
+      "n_openings": 77,
+      "solver_status": "OK"
+    }
+  ],
+  "sensitivity_summary": {
+    "threshold_multiplier_chosen": 1.0,
+    "knn_k_chosen": 12,
+    "beta_chosen": 0.25,
+    "grid_search_n_combinations": 81,
+    "grid_search_pareto_n": 10
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "D_MAX": 450.0,
+  "S_MIN": 200.0,
+  "beta": 0.1,
+  "p_total": 9,
+  "coverage_rate": 0.9483,
+  "w_coverage_rate": NaN,
+  "w_mean_dist_m": 173.48,
+  "runtime_s": 3.35,
+  "n_pareto_points": 81
+}

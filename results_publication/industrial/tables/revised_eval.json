@@ -1,0 +1,20 @@
+{
+  "model": "Proposed model (spectral + MCA, proportional)",
+  "allocation_rule": "proportional (demand-weighted)",
+  "solve_distance": "network",
+  "eval_distance": "network",
+  "clustering": "spectral",
+  "mca_used": "yes",
+  "coverage_rate": 0.7579,
+  "w_coverage_rate": 0.8251,
+  "mean_dist_m": 199.98,
+  "w_mean_dist_m": 194.44,
+  "n_covered": 1099,
+  "n_demands": 1450,
+  "n_openings": 42,
+  "runtime_s": 2.51,
+  "eval_runtime_s": 0.04,
+  "solver_status": "OK",
+  "coverage_pct": 75.79,
+  "w_coverage_pct": 82.51
+}

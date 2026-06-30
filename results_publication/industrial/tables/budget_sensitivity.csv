@@ -1,0 +1,4 @@
+D_MAX,S_MIN,beta,p_total,coverage_rate,w_coverage_rate,mean_dist_m,w_mean_dist_m,n_covered,n_demands,n_openings,runtime_s,solver_status
+366,240,0.25,30,0.7007,0.7641,202.27,196.21,1016,1450,30,3.11,OK
+366,240,0.25,42,0.7579,0.8251,199.98,194.44,1099,1450,42,2.5,OK
+366,240,0.25,54,0.811,0.8777,196.69,192.32,1176,1450,54,3.16,OK
